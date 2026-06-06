@@ -1,0 +1,529 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zuwena Kenya</title>
+
+<style>
+:root {
+  --bg: #f7efe6;
+  --panel: rgba(255, 250, 244, 0.9);
+  --text: #241713;
+  --muted: #6b5a51;
+  --gold: #c9a354;
+  --gold-light: #f4dfab;
+  --gold-dark: #8b682a;
+  --green: #25D366;
+  --shadow: 0 18px 45px rgba(54, 30, 20, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Georgia, serif;
+  color: var(--text);
+  background:
+    linear-gradient(rgba(247,239,230,0.86), rgba(247,239,230,0.96)),
+    url("{% static 'Zuwena logo.JPG' %}") center/cover fixed;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+  z-index: 20;
+}
+
+.page-shell {
+  width: min(1120px, 94%);
+  margin: auto;
+  position: relative;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 18px;
+  margin-top: 18px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,163,84,0.22);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(54, 30, 20, 0.08);
+  animation: slideDown 0.85s ease both;
+}
+
+.brand-name {
+  margin: 0;
+  font-family: "Playfair Display", "Cinzel", Georgia, serif;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.nav a {
+  position: relative;
+  padding: 8px 0;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav a:hover::after {
+  width: 90%;
+}
+
+.hero {
+  min-height: 72vh;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 28px;
+  padding: 42px 0 20px;
+}
+
+.hero-copy {
+  padding: clamp(26px, 5vw, 48px);
+  animation: fadeUp 1s ease both 0.18s;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.hero h1 {
+  margin: 0;
+  max-width: 12ch;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  line-height: 0.95;
+}
+
+.hero p {
+  max-width: 560px;
+  margin: 20px 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.button {
+  min-height: 46px;
+  padding: 13px 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.button.primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: #21160f;
+  box-shadow: 0 8px 22px rgba(201,163,84,0.42);
+}
+
+.button.secondary {
+  border: 1px solid rgba(139,104,42,0.35);
+  background: rgba(255,255,255,0.5);
+}
+
+.button:hover {
+  transform: translateY(-3px);
+}
+
+.hero-visual {
+  min-height: 430px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  animation: fadeIn 1s ease both 0.35s;
+}
+
+.logo-orbit {
+  width: min(390px, 86vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(244,223,171,0.95), rgba(201,163,84,0.24) 38%, transparent 68%),
+    rgba(255,255,255,0.42);
+  border: 1px solid rgba(201,163,84,0.35);
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+  animation: float 4.5s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-orbit::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.8), transparent, rgba(201,163,84,0.28), transparent);
+  animation: spin 8s linear infinite;
+}
+
+.logo-orbit img {
+  width: 72%;
+  height: 72%;
+  object-fit: cover;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 12px 35px rgba(54, 30, 20, 0.2);
+}
+
+.motion-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 24px rgba(201,163,84,0.8);
+  animation: drift 7s ease-in-out infinite;
+}
+
+.motion-dot.one {
+  top: 15%;
+  right: 16%;
+}
+
+.motion-dot.two {
+  bottom: 18%;
+  left: 12%;
+  animation-delay: -2s;
+}
+
+.section-title {
+  margin: 44px 0 18px;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.product-card {
+  min-height: 310px;
+  background: rgba(255,255,255,0.82);
+  border: 1px solid rgba(201,163,84,0.22);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 12px 30px rgba(54, 30, 20, 0.1);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.product-card::before {
+  content: "";
+  position: absolute;
+  top: -90%;
+  left: -60%;
+  width: 220%;
+  height: 180%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: rotate(25deg);
+  transition: top 0.7s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 42px rgba(54, 30, 20, 0.16);
+}
+
+.product-card:hover::before {
+  top: 90%;
+}
+
+.product-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.08);
+}
+
+.product-card p {
+  margin: 0;
+  padding: 18px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.contact-panel {
+  margin: 48px 0 0;
+  padding: 26px;
+  background: rgba(255,255,255,0.75);
+  border: 1px solid rgba(201,163,84,0.22);
+  border-radius: 16px;
+}
+
+.contact-panel p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.floating-btn {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  background: var(--green);
+  color: white;
+  font-size: 25px;
+  border-radius: 50%;
+  box-shadow: 0 12px 28px rgba(37,211,102,0.38);
+  z-index: 10;
+  animation: pulse 2s infinite;
+}
+
+footer {
+  text-align: center;
+  margin: 46px 0 22px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.animate {
+  opacity: 0;
+  transform: translateY(42px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.animate.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery .animate:nth-child(2) {
+  transition-delay: 0.12s;
+}
+
+.gallery .animate:nth-child(3) {
+  transition-delay: 0.24s;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-18px) rotate(1deg); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(26px, -22px) scale(1.35); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media(max-width: 820px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    padding-top: 26px;
+  }
+
+  .hero-visual {
+    min-height: 320px;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="page-shell">
+
+<header class="topbar">
+  <h2 class="brand-name">Zuwena Kenya</h2>
+  <nav class="nav">
+    <a href="#collection">Collection</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Custom African Fashion</p>
+    <h1>Luxury Fashion With Identity</h1>
+    <p>Custom shirts designed for bold African style and premium branding.</p>
+    <div class="hero-actions">
+      <a class="button primary" href="https://wa.me/254716117885?text=Hello%20Zuwena%20Kenya,%20I%20would%20like%20to%20place%20an%20order" target="_blank">
+        Order Now
+      </a>
+      <a class="button secondary" href="#contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <span class="motion-dot one"></span>
+    <div class="logo-orbit">
+      <img src="{% static 'Zuwena logo.JPG' %}" alt="Zuwena Kenya logo">
+    </div>
+    <span class="motion-dot two"></span>
+  </div>
+</section>
+
+<section id="collection">
+  <h2 class="section-title animate">Latest Designs</h2>
+
+  <div class="gallery">
+    <div class="product-card animate">
+      <img src="{% static 'Zuwena logo.JPG' %}" alt="Classic Design">
+      <p>Classic Design</p>
+    </div>
+
+    <div class="product-card animate">
+      <img src="{% static 'Zuwena logo.JPG' %}" alt="Modern Style">
+      <p>Modern Style</p>
+    </div>
+
+    <div class="product-card animate">
+      <img src="{% static 'Zuwena logo.JPG' %}" alt="Premium Wear">
+      <p>Premium Wear</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-panel animate">
+  <h2>Contact</h2>
+  <p>Call or WhatsApp: +254 716117885</p>
+</section>
+
+<footer>
+  &copy; 2026 Zuwena Kenya Fashion Design. All rights reserved.
+</footer>
+
+</div>
+
+<a href="https://wa.me/254716117885" class="floating-btn" aria-label="Chat on WhatsApp">💬</a>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+    }
+  });
+}, { threshold: 0.18 });
+
+document.querySelectorAll('.animate').forEach(el => {
+  observer.observe(el);
+});
+
+const progressBar = document.getElementById('progressBar');
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = `${progress}%`;
+});
+</script>
+
+</body>
+</html>
